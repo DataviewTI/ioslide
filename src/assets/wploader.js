@@ -33,6 +33,7 @@ function IOSlide(params={}){
       IO.dep.io.toastr + 'toastr.min.css',
       IO.src.io.css + 'toastr.css',
       IO.src.io.root + 'forms/video-form.css',
+      $.dep.cropper + 'cropper.css',
       $.dep.slide + 'slide.css',
     ], IO.dest.io.root + 'services/io-slide.min.css');
     

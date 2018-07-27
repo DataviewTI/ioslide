@@ -12,12 +12,13 @@ class CreateSlidesTable extends Migration
 			{
 				$table->increments('id');
 				$table->string('name');
-				$table->string('url')->nullable();
 				$table->dateTime('date_start');
         $table->dateTime('date_end')->nullable();
-        $table->smallInteger('open_delay')->unsigned()->nullable();
-        $table->smallInteger('close_delay')->unsigned()->nullable();
-        $table->boolean('close_on_esc')->default(false);
+        $table->smallInteger('interval')->unsigned()->nullable();
+        $table->boolean('controls')->default(true);
+        $table->boolean('indicators')->default(false);
+        $table->boolean('pause')->default(false);
+        $table->boolean('wrap')->default(true);
         $table->smallInteger('width')->unsigned()->nullable();
         $table->smallInteger('height')->unsigned()->nullable();
         $table->integer('group_id')->unsigned()->nullable();

@@ -1,0 +1,9 @@
+
+
+.io-slide .carousel-control-prev,.io-slide .carousel-control-next{
+  width:5%;
+}
+.io-slide .carousel-control-prev span,.io-slide .carousel-control-next span{
+  width:30px;
+  height:30px;
+}

@@ -14,7 +14,7 @@ class SlideSeeder extends Seeder
         Service::insert([
             'service' => "Slide",
             'alias' =>'slide',
-            'ico' => 'ico-image',
+            'ico' => 'ico-slider',
             'description' => "Controle de Slides",
             'order' => Service::max('order')+1
           ]);

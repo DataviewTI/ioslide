@@ -15,7 +15,7 @@
 			@component('IntranetOne::io.components.nav-tabs',
 			[
 				"_id" => "default-tablist",
-				"_active"=>0,
+				"_active"=>1,
 				"_tabs"=> [
 					[
 						"tab"=>"Listar",
@@ -26,15 +26,7 @@
 						"tab"=>"Cadastrar",
 						"icon"=>"ico ico-new",
 						"view"=>"Slide::form"
-					],
-					[
-						"tab"=>"Categorias",
-						"icon"=>"ico ico-structure-2",
-						"view"=>"IntranetOne::io.layout.categories-crud",
-						"params"=>[
-							"cat"=>"Gallery"
-						]
-					],
+					]
 				]
 			])
 			@endcomponent
@@ -49,7 +41,14 @@
         ])
   @endsection
 
+  @section('before_body_close')
+    @include('Slide::infos-modal')
+  @endsection
+
+
 @section('footer_scripts')
+
+
 
 <script src="{{ asset('js/pickadate-full.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('io/services/io-slide-babel.min.js') }}" type="text/javascript"></script>

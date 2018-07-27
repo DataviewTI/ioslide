@@ -24,7 +24,7 @@ class SlideController extends IOController{
 	}
 	
 	public function list(){
-    $query = Slide::select('id','name','url','date_start','date_end','group_id','close_on_esc','open_delay','close_delay')
+    $query = Slide::select('id','name','date_start','date_end','group_id','interval')
     ->with([
       'group'=>function($query){
         $query->select('groups.id','sizes');
@@ -43,13 +43,13 @@ class SlideController extends IOController{
     $obj = new Slide($request->all());
     if($request->sizes!= null){
       $obj->setAppend("sizes",$request->sizes);
-      $obj->setAppend("has_images",$request->has_images);
+      //$obj->setAppend("has_images",$request->has_images);
       $obj->save();
     }
-    if($request->sizes!= null && $request->has_images>0){
+    //if($request->sizes!= null && $request->has_images>0){
       $obj->group->manageImages(json_decode($request->__dz_images),json_decode($request->sizes));
       $obj->save();
-    }
+    //}
 
     return response()->json(['success'=>true,'data'=>null]);
 	}
@@ -59,7 +59,7 @@ class SlideController extends IOController{
     if(!$check['status'])
       return response()->json(['errors' => $check['errors'] ], $check['code']);	
 
-    $query = Slide::select('id','name','url','width','height','date_start','date_end','open_delay','close_delay','group_id','close_on_esc')
+    $query = Slide::select('id','name','width','height','date_start','date_end','interval','indicators','controls','wrap','pause','group_id','width','height')
       ->with([
           'group'=>function($query){
           $query->select('groups.id','sizes')
@@ -81,7 +81,7 @@ class SlideController extends IOController{
       $_new = (object) $request->all();
 			$_old = Slide::find($id);
 			
-      $upd = ['name','url','date_start','date_end','open_delay','close_delay','close_on_esc','width','height'];
+      $upd = ['name','date_start','date_end','interval','indicators','controls','wrap','pause','width','height'];
 
       foreach($upd as $u)
         $_old->{$u} = $_new->{$u};

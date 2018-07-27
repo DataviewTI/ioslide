@@ -3,7 +3,7 @@
     "_id" => "default-wizard",
     "_min_height"=>"435px",
     "_steps"=> [
-        ["name" => "Dados Gerais", "view"=> "Slide::form-general"],
+        ["name" => "Dados Gerais", "view" => "Slide::form-general"],
       ]
   ])
   @endcomponent

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Storage;
 
 class Slide extends IOModel
 {
-  protected $fillable = ['name','url','date_start','date_end','open_delay','close_delay','group_id'];
+  protected $fillable = ['name','date_start','date_end','interval','controls','indicators','pause','wrap','group_id','width','height'];
 
   public function group(){
     return $this->belongsTo('Dataview\IntranetOne\Group');
@@ -18,14 +18,12 @@ class Slide extends IOModel
     parent::boot(); 
 
     static::created(function (Slide $obj) {
-      if($obj->getAppend("has_images")){
         $group = new Group([
           'group' => "Album do Slide ".$obj->id,
           'sizes' => $obj->getAppend("sizes")
         ]);
         $group->save();
         $obj->group()->associate($group)->save();
-      }
     });
     
   }

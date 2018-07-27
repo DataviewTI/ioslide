@@ -10,10 +10,13 @@ class SlideRequest extends IORequest
 
     $input['date_start'] = $input['date_start_submit'];
     $input['date_end'] =  $input['date_end_submit'];
-    //$input['open_delay'] =  empty($input['open_delay']) ? 0 : $input['open_delay'];
-    //$input['close_delay'] =  empty($input['close_delay']) ? 0 : $input['close_delay'];
     $input['sizes'] = $input['__dz_copy_params'];
-    $input['close_on_esc'] = (int)($input['__close_on_esc']=='true');
+    $input['interval'] =  empty($input['interval']) ? 0 : $input['interval'];
+    $input['controls'] = (int)($input['__controls']=='true');
+    $input['indicators'] = (int)($input['__indicators']=='true');
+    $input['pause'] = (int)($input['__pause']=='true');
+    $input['wrap'] = (int)($input['__wrap']=='true');
+
 
     $this->replace($input);
 	}
