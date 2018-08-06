@@ -43,6 +43,7 @@
 
   @section('before_body_close')
     @include('Slide::infos-modal')
+    @include('Slide::fragments-modal')
   @endsection
 
 

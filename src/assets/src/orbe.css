@@ -1,0 +1,183 @@
+.container-orbes{
+  position:relative;
+}
+.orbe{
+  outline:2px #fff dashed;
+  position:absolute;
+  width:auto;
+  padding-top:25px;
+  min-width:100px;
+  height:auto;
+  min-height:40px;
+  resize: both;
+  overflow: auto;
+  background-color:rgba(255,255,255,0);
+  overflow:hidden;
+}
+.orbe *{
+  cursor:default;
+}
+.orbe-content{
+  padding:0 5px 5px 5px;
+}
+.orbe .apply-font{
+  cursor:text;
+  border:1px rgba(0,0,0,0) dashed;
+}
+.orbe.editting .orb-text-edit{
+  overflow-y:hidden;
+  background-color:rgba(255,255,255,0);
+  resize: none;
+  border:1px rgba(0,0,0,1) dashed;
+  padding:0!important;
+  outline:none
+}
+
+
+
+.orbe-handle, .orbe-animate, .orbe-processing, .orbe-editting, .orbe-remove{
+  position:absolute;
+  display:none;
+  padding:0;
+  top:0;
+  height:25px;
+  width:25px;
+  cursor:all-scroll;
+}
+.orbe-handle::before, .orbe-animate::before,
+.orbe-processing::before,.orbe-editting::before,
+.orbe-remove::before{
+  position:absolute;
+  width:25px;
+  height:25px;
+  line-height:25px;
+  text-align:center;
+  font-family:'intranetone';
+  content:'\0057';
+  color:#fff;
+  text-shadow:1px 1px 3px rgba(150,150,150,0);
+}
+.orbe-handle:hover::before, .orbe-animate:hover::before,
+.orbe-processing:hover::before,.orbe-editting:hover::before,
+.orbe-remove:hover::before{
+  color:#444;
+  text-shadow:1px 1px 3px rgba(150,150,150,1);
+}
+.orbe-animate{
+  left:30px;
+  cursor:pointer;
+}
+
+.orbe-animate::before{
+  content:'\0056';
+}
+
+.orbe-editting::before{
+  content:'\004b';
+}
+
+.orbe-remove,.orbe-editting{
+  right:0;
+}
+
+.orbe-remove::before{
+  content:'\004e';
+}
+ 
+ 
+ .orbe-processing, .orbe-remove{
+  cursor:pointer;
+}
+
+.orbe-processing::before{
+  content:'\0063';
+  color:#c5101a;
+  -webkit-animation: rotation 3s infinite linear;
+  animation: rotation 3s infinite linear;
+  cursor:default;
+}
+
+.orbe-blur{
+  background-color:rgba(255,255,255,0);
+  outline:2px rgba(255,255,255,0) dashed;
+
+}
+.orbe-active,.orbe-hover{
+  background-color:rgba(255,255,255,0);
+  outline:2px #fff dashed;
+}
+
+
+.orbe-active .orbe-handle,.orbe-hover .orbe-handle,.orbe-active .orbe-remove,.orbe-hover .orbe-remove{
+  display:block;
+}
+
+.orbe-active[data-animate] .orbe-animate,.orbe-hover[data-animate] .orbe-animate{
+  display:block;
+}
+
+.orbe-active.animated .orbe-processing,.orbe-hover.animated .orbe-processing{
+  display:block;
+}
+
+.orbe-active.editting .orbe-editting,.orbe-hover.editting .orbe-editting{
+  display:block;
+}
+
+.orbe-active.editting .orbe-remove,.orbe-hover.editting .orbe-remove{
+  display:none;
+}
+
+.orb-selection{
+  padding-top:6px;
+}
+
+.orbe-active.animated .orbe-handle,.orbe-hover.animated .orbe-handle,
+.orbe-active.animated .orbe-editting,.orbe-hover.animated .orbe-editting,
+.orbe-active.animated .orbe-remove,.orbe-hover.animated .orbe-remove,
+.orbe-active.animated .orbe-animate,.orbe-hover.animated .orbe-animate{
+  display:none;
+}
+
+
+/*third parties components*/
+.font-select{
+  width:100%;
+}
+.font-select > a{
+  height: 48px;
+  line-height: 48px;
+  padding-top:7px;
+  width:100%;
+}
+.font-select .fs-drop {
+  width: 100%;
+}
+.font-select > a, .font-select > a div{
+  border-radius:0;
+}
+.font-select > a span{
+  color:#000;
+  font-size:18px;
+}
+
+.minicolors-sprite {
+  background-image: url('/io/images/plugins/jquery.minicolors.png');
+}
+
+#fcolor,#shadow-color{
+ height:48px;
+ padding-top:5px;
+ padding-right:3px;
+}
+#shadow-color{
+  border:none;
+}
+.minicolors-swatch{
+  margin-top:13px;
+}
+
+
+.orb-text-edit ~ .apply-font{
+  display:none;
+} 

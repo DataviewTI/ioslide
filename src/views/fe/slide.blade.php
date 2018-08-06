@@ -33,7 +33,33 @@
                 <img class="d-block w-100" src="{{$img->getPath()}}" alt="First slide">
               </a>
             @else
-              <img class="d-block w-100" src="{{$img->getPath()}}" alt="First slide">
+              @php
+                $container_orbes = $img->getData('orbs');
+                $orbes = [];
+                foreach ($container_orbes as $key=>$value){
+                  array_push($orbes,$container_orbes->{$key});
+                }
+              @endphp
+                @if(count($orbes))
+                  <div class = 'fe-orbs-container'>
+                    @foreach($orbes as $o)
+                      <script>
+                        (function(){
+                          $('head').append(`<link href="https://fonts.googleapis.com/css?family={{str_replace(' ','+',$o->font)}}" rel="stylesheet" type="text/css">`);
+                        })();
+                      </script>
+                      <div class = 'fe-orb b-red animated {{$o->animate}} {{$o->delay}} {{$o->speed}}' style = "
+                      left:{{$o->x}}px;
+                      top:{{$o->y}}px;
+                      width:{{$o->w}}px;
+                      height:{{$o->h}}px;
+                      ">{!!$o->content!!}</div>
+                    @endforeach
+                    <img class="d-block w-100" src="{{$img->getPath()}}" alt="First slide">
+                  </div>
+                @else
+                  <img class="d-block w-100" src="{{$img->getPath()}}" alt="First slide">
+                @endif
             @endif
           </div>
         @endforeach

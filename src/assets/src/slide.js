@@ -3,6 +3,164 @@ new IOService({
   },
   function(self){
 
+    //self.orbs = new Orbe();
+    let btn_add_slide = $(`<button type = 'button' class = 'd-flex btn-lg btn-info btn-add-slide'>
+      <i class = 'ico ico-plus my-auto'></i>
+    </button>`).on('click',()=>{
+      $('#custom-dropzone').trigger('click');
+    });
+
+    $(".dropzone-container").append(btn_add_slide);
+    $('#btn-orb-preview').on('click',(e)=>{
+      let ico = $(e.target).find('.ico');
+      let _orbes = $('.container-orbes').find('.orbe[data-animate]');
+      let counter = _orbes.length; 
+      if(_orbes.length){
+        ico.addClass('ico-orbe ico-spin').removeClass('ico-eye');
+        $('#orbs-modal .modal-header').css('position','relative').setDisabled(true);
+        _orbes.each((index,el)=>{
+          let _el = $(el);
+          let _anim = _el.attr('data-animate');
+          _el.animateCss(_anim,()=>{
+            console.log(counter); 
+            if(!--counter)
+              $('#orbs-modal .modal-header').setDisabled(false);
+              ico.removeClass('ico-orbe ico-spin').addClass('ico-eye')
+            });
+        });
+      }
+    });
+
+    $('#shadow-angle').knob({
+      "min":0,
+      "max":360,
+      "fgColor":"#333",
+      "skin":"tron",
+      font : "normal 10px Oswald",
+      "width":48, 
+      thickness:.3,
+      cursor:10,
+      'change' : v=> {
+        applyTextShadow($('.container-orbes').find('.orbe-active .apply-font'));
+      }
+    });
+
+    $('#shadow-distance').knob({
+      "min":-75,
+      "max":75,
+      rotation:"anticlockwise",
+      "fgColor":"#333",
+      "skin":"tron",
+      font : "normal 10px Oswald",
+      "width":48, 
+      thickness:.3,
+      cursor:10,
+      'change' : v=> {
+        applyTextShadow($('.container-orbes').find('.orbe-active .apply-font'));
+      }
+    });
+
+    $('#shadow-blur').knob({
+      "min":0,
+      "max":30,
+      "fgColor":"#333",
+      "skin":"tron",
+      font : "normal 10px Oswald",
+      "width":48, 
+      thickness:.3,
+      cursor:10,
+      'change' : v=> {
+        applyTextShadow($('.container-orbes').find('.orbe-active .apply-font'));
+      }
+    });
+    
+    //$('.container-text-shadow').setDisabled(true);
+
+    $('#text-shadow').attrchange(function(attrName){
+      let attr = $(this).attr('aria-pressed');
+      if(attrName == 'aria-pressed'){
+        $('#__text-shadow').val(attr);
+
+        if(attr == 'true'){
+          $('.container-text-shadow').setDisabled(false);
+          applyTextShadow($('.container-orbes').find('.orbe-active .apply-font'));
+        }
+        else{
+          $('.container-text-shadow').setDisabled(true);
+          $('.container-orbes').find('.orbe-active .apply-font').css('text-shadow','none');
+        }
+  
+      }
+    });
+
+    $('#btn-add-orb').on('click',(e)=>{
+      addOrbe();
+    });
+
+    $('.container-orbes').on('click',(e)=>{
+      //console.log(this);
+      $('.container-orbes')
+      .find('.orbe')
+      .addClass('orbe-blur')
+      .removeClass('orbe-active editting')
+      .find('.orb-text-edit').each((i,obj)=>{
+        let _obj = $(obj);
+        let h1 = $(obj).next();
+        h1.text(_obj.val());
+        _obj.remove();
+      })
+      $('.font-select').parent().setDisabled(false).next().setDisabled(false);
+      //console.log(self.fontPicker.getActiveFont());
+     });
+
+     $('#font-select').fontselect({
+      placeholder: 'Selecione a fonte'
+     }).change(function(){
+      let font = $(this).val().replace(/\+/g, ' ') || 'Oswald';
+      $('.container-orbes').find('.orbe-active .apply-font').css({'font-family':font}).attr('data-font',font);
+    });
+    
+    $('#fsize').change(function(){
+      let size = $(this).val()+'px';
+      $('.container-orbes').find('.orbe-active .apply-font').css({'font-size':size}).attr('data-size',size);
+    });
+    
+    $('#fcolor').minicolors({
+      defaultValue: '#fff',
+      letterCase: 'uppercase',
+      opacity:true,
+      change: function(value, opacity) {
+        let rgba = $(this).minicolors('rgbaString');
+        $('.container-orbes').find('.orbe-active .apply-font').css({'color':rgba}).attr('data-color',rgba);
+      }
+    });
+
+    $('#shadow-color').minicolors({
+      defaultValue: '#000',
+      letterCase: 'uppercase',
+      opacity:true,
+      change: function(value, opacity) {
+        applyTextShadow($('.container-orbes').find('.orbe-active .apply-font'));
+      }
+    });
+
+    $('#o-speed, #o-delay').prop('disabled',true);
+
+
+    $('#o-animate').change(function(){
+      setAnimation($(this).val());
+    });
+    
+    $('#o-speed').change(function(){
+      setAnimationSpeed($(this).val());
+    });
+
+      $('#o-delay').change(function(){
+        setAnimationDelay($(this).val());
+      });
+
+        
+
     $('[data-toggle="popover"]').popover();
 
     $('#controls').attrchange(function(attrName) {
@@ -277,7 +435,75 @@ new IOService({
           action:(file)=>{
             self.dz.addModal({
               obj:$('#slide-modal'),
-              file
+              file,
+            })
+          },
+        },
+        'orbs':{
+          ico:'ico-orbe',
+          tooltip:'orbes',
+          bg:'bg-success',
+          action:(file)=>{
+            self.dz.addModal({
+              obj:$('#orbs-modal'),
+              file,
+              onShow:(params,obj)=>{
+                let img = obj.find("[dz-info-modal='img']");
+                img.removeClass('w-100').addClass('m-auto').css({width:'1350px',height:'auto'});
+                //console.log(params.infos.data.orbs);
+                for(let o in params.infos.data.orbs){
+                  let __orb = params.infos.data.orbs[o];
+
+                  $('head').append(`<link href="https://fonts.googleapis.com/css?family=${__orb.font.replace(' ','+')}"
+                   rel="stylesheet" type="text/css">`);
+                  addOrbe({
+                    reload:true,
+                    content:__orb.content, 
+                    x:__orb.x,
+                    y:__orb.y,
+                    w:__orb.w,
+                    h:__orb.h,
+                    animate:__orb.animate,
+                    delay:__orb.delay,
+                    speed:__orb.speed,
+                    color:__orb.color,
+                    shadow:__orb.shadow
+
+                  });
+                }
+
+                obj.on('hidden.bs.modal',e=>{
+                  //obj.find("#btn-add-orb").off('click');
+                  //remove todos os orbs
+                  $('.container-orbes').find('.orbe').remove();
+                });
+              },
+              onSave:(_file,obj)=>{
+                //_file.infos.data.orbes = {} //zera toda vez
+                //percorre todos os orbs e atualiza os valores
+                _file.infos.data.orbs = {}
+                $('.container-orbes').find('.orbe').each((index,el)=>{
+                  let _el = $(el);
+                  let _font = _el.find('.orbe-content').find('.apply-font').first();
+                  let _data = {
+                    content:_el.find('.orbe-content').html().trim(),
+                    w:_el.width(),
+                    h:_el.outerHeight(),
+                    x:_el.data('draggabilly').position.x,
+                    y:_el.data('draggabilly').position.y,
+                    font:_font.attr('data-font'),
+                    size:_font.attr('data-size'), 
+                    color:_font.attr('data-color'),
+                    animate:_el.attr('data-animate') || "",
+                    delay:_el.attr('data-delay') || "",
+                    speed:_el.attr('data-speed') || "",
+                    shadow:_font.css('text-shadow') || ""
+                  }
+                  let _id = _el.attr('id');
+                  _file.infos.data.orbs[_id] = _data;
+                });
+
+              }
             })
           }
         },
@@ -293,8 +519,7 @@ new IOService({
     self.wizardActions(function(){ 
       self.dz.copy_params.sizes.default = {"w":$('#width').val(),"h":$('#height').val()}
       $("[name='__dz_images']").val(JSON.stringify(self.dz.getOrderedDataImages()));
-
-      console.log(self.dz.getOrderedDataImages());
+      console.log($("[name='__dz_images']").val());
 
       $("[name='__dz_copy_params']").val(JSON.stringify(self.dz.copy_params));
     });
@@ -362,6 +587,159 @@ function view(self){
     }
 }
 
+function calcAspect(){
+  let w = $('#width').val();
+  let h = $('#height').val();
+  if(w>0 && h>0){
+    let r = gcd(w, h);
+    return `${w/r}:${h/r}`;
+  }
+  else{
+    return "";
+  }
+}
+
 function gcd(a, b) {
   return (b == 0) ? a : gcd (b, a%b);
+}
+
+function addOrbe(p={
+  content:`<h1 class = 'apply-font h-100'>Um Conteúdo Qualquer</h1>`,
+  reload:false
+  }){
+
+  new Orbe('.container-orbes',p.content,(orb)=>{
+    let $container = $('.container-orbes');
+    if(p.x == undefined && p.y == undefined){
+      let ch = $container.height();
+      let cw = $container.width();
+      let oh = orb._this.height();
+      let ow = orb._this.width();
+      let r = Math.floor((Math.random() * 80) + 1); //* ;
+      r *= (Math.random()%2==0) ? 1 : -1;
+      orb._this.draggabilly('setPosition',((cw/2)-(ow/2))+(r),((ch/2)-(oh/2))+(r));
+    }
+    else
+      orb._this.draggabilly('setPosition',p.x,p.y);
+
+    orb._this.removeClass('invisible');
+    
+    if(!p.reload)//faz o bind somente se for objeto novo
+      $('#font-select, #fsize, #o-animate, #o-speed, #o-delay').trigger('change');
+
+    if(p.w!==undefined)
+      orb._this.css('width',p.w+'px')
+
+    if(p.h!==undefined)
+      orb._this.css('height',p.h+'px')
+
+
+    let rgba = $('#fcolor').minicolors('rgbaString');
+
+    if(p.color==undefined)
+      $('.container-orbes').find('.orbe-active .apply-font').css({'color':rgba}).attr('data-color',rgba)
+    else
+      $('.container-orbes').find('.orbe-active .apply-font').attr('data-color',p.color)
+
+    if(p.shadow == undefined)
+      applyTextShadow($('.container-orbes').find('.orbe-active .apply-font'));
+
+    $('.container-orbes').find('.orbe-active .apply-font').on('dblclick',(e)=>{
+        if(!orb._this.hasClass('editting') && !orb._this.hasClass('animated')){
+          let obj = $(e.target);
+          $('.font-select').parent().setDisabled(true).next().setDisabled(true);
+          let prop = ['color','width','height','font'];
+          let ta = $("<textarea type = 'text' class = 'w-100 h-100 orb-text-edit'>");
+          prop.forEach((a,b)=>{
+            ta.css(a,obj.css(a)) 
+          });
+          ta.css('width',obj.parent().width()+'px');
+          let _width = orb._this.width();
+          let _height = orb._this.outerHeight();
+          ta.insertBefore(obj).focus().text(obj.text()).focus(); 
+          orb._this.css({'width':_width+'px','height':_height+'px'});
+          orb._this.addClass('editting');
+        }
+      });
+
+    if(p.animate!==undefined){
+      setAnimation(p.animate,false);
+      if(p.speed!==undefined)
+        setAnimationSpeed(p.speed,false);
+      if(p.delay!==undefined)
+        setAnimationDelay(p.delay,false);
+    }
+
+    $('.container-orbes').find('.orbe-active .orbe-animate').on('click',(e)=>{
+        let _orb = $(e.target).parent();
+        let _anim = _orb.attr('data-animate');
+        _orb.animateCss(_anim,()=>{
+        });
+    });
+
+    $('.container-orbes').find('.orbe-active .orbe-editting').on('click',(e)=>{
+      $('.container-orbes').trigger('click');
+    });
+
+    $('.container-orbes').find('.orbe-active .orbe-remove').on('click',(e)=>{
+      $(e.target).parent().remove();
+    });
+  });
+}
+
+function setAnimation(val,animate=true){
+  let _orb = $('.container-orbes').find('.orbe-active');
+  let oldanime = _orb.attr('data-animate') || '';
+  _orb.removeClass(`animated ${oldanime}`.trim());
+
+  if(val !== ''){ 
+    $('#o-speed, #o-delay').removeAttr('disabled');
+    _orb.attr('data-animate',val);
+    if(animate){
+      _orb.addClass(`animated ${val}`);
+      _orb.animateCss(val,(e)=>{
+      });
+    }
+  }
+  else{
+    _orb.removeAttr('data-animate');
+    $('#o-speed, #o-delay').prop('disabled',true).val('');
+  }
+}
+
+function setAnimationSpeed(val){
+  let _orb = $('.container-orbes').find('.orbe-active');
+  let old = _orb.attr('data-speed') || '';
+  _orb.removeClass(`${old}`.trim());
+
+  if(val !== ''){
+      _orb.addClass(val);
+      _orb.css({'data-speed':val}).attr('data-speed',val);
+    }
+    else
+      _orb.removeAttr('data-speed');
+}
+
+function setAnimationDelay(val){
+  let _orb = $('.container-orbes').find('.orbe-active');
+  let old = _orb.attr('data-delay') || '';
+  _orb.removeClass(`${old}`.trim());
+    
+  if(val !== ''){
+    _orb.addClass(val);
+    _orb.css({'data-delay':val}).attr('data-delay',val);
+  }
+  else
+    _orb.removeAttr('data-delay');
+}
+
+function applyTextShadow(obj){
+  let _angle = $('#shadow-angle').val()*((Math.PI)/180);
+  let _distance = $('#shadow-distance').val();
+  let _x = Math.round(_distance * Math.cos(_angle));
+  let _y = Math.round(_distance * Math.sin(_angle));
+  let _blur = $('#shadow-blur').val();
+  let _rgba = $('#shadow-color').minicolors('rgbaString');
+  console.log(_rgba);
+  obj.css('text-shadow',`${_x}px ${_y}px ${_blur}px ${_rgba}`)
 }

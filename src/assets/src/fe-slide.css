@@ -7,3 +7,12 @@
   width:30px;
   height:30px;
 }
+
+.fe-orbs-container{
+  border:1px green solid;
+  position:relative;
+}
+.fe-orb{
+  border:1px blue solid;
+  position:absolute;
+}

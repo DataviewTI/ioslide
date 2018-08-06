@@ -1,5 +1,5 @@
 .__sortable-list{
-  height:350px;
+  height:320px;
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -18,4 +18,26 @@
 .checkbox .checkbox-decorator{
   position:relative;
   margin:auto!important;
+}
+
+.btn-add-slide{
+  position:absolute;
+  left:-17px;
+  top:7px;
+  border-radius:50%;
+  border:none;
+  width:35px;
+  cursor:pointer;
+  height:35px;
+  outline:none!important;
+}
+.btn-add-slide .ico{
+  border-radius:50%;
+  text-align:center;
+  position:absolute;
+  width:100%;
+  height:100%;
+  border:1px transparent solid;
+  left:0;
+  top:0;
 }
