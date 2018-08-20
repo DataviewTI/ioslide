@@ -3,7 +3,8 @@ new IOService({
   },
   function(self){
 
-    //self.orbs = new Orbe();
+
+  //self.orbs = new Orbe();
     let btn_add_slide = $(`<button type = 'button' class = 'd-flex btn-lg btn-info btn-add-slide'>
       <i class = 'ico ico-plus my-auto'></i>
     </button>`).on('click',()=>{
@@ -12,21 +13,28 @@ new IOService({
 
     $(".dropzone-container").append(btn_add_slide);
     $('#btn-orb-preview').on('click',(e)=>{
+
       let ico = $(e.target).find('.ico');
       let _orbes = $('.container-orbes').find('.orbe[data-animate]');
       let counter = _orbes.length; 
       if(_orbes.length){
         ico.addClass('ico-orbe ico-spin').removeClass('ico-eye');
         $('#orbs-modal .modal-header').css('position','relative').setDisabled(true);
+        $('.container-splitters .gutter').css('visibility','hidden');
+        $('.container-orbes')
+        .find('.orbe')
+        .removeClass('orbe-active')
+
         _orbes.each((index,el)=>{
           let _el = $(el);
           let _anim = _el.attr('data-animate');
           _el.animateCss(_anim,()=>{
-            console.log(counter); 
-            if(!--counter)
+            if(!--counter){
               $('#orbs-modal .modal-header').setDisabled(false);
               ico.removeClass('ico-orbe ico-spin').addClass('ico-eye')
-            });
+              $('.container-splitters .gutter').css('visibility','visible');
+            }
+          });
         });
       }
     });
@@ -109,7 +117,10 @@ new IOService({
         h1.text(_obj.val());
         _obj.remove();
       })
+
       $('.font-select').parent().setDisabled(false).next().setDisabled(false);
+
+      
       //console.log(self.fontPicker.getActiveFont());
      });
 
@@ -185,10 +196,31 @@ new IOService({
       animation: 250,
       handle: ".dz-reorder",
     });
+    
+    Sortable.create(document.getElementById('custom-dropzone'),{
+      animation: 250,
+      handle: ".dz-reorder",
+    });
+
+
+    $('.vsplitter').each((i,obj)=>{
+      Sortable.create(document.getElementById($(obj).attr('id')),{
+        animation: 250,
+        handle: ".orbe-handle",
+        group: {
+          name:'orbes',
+          pull: function (to, from) {
+            return !(to.el.children.length > 0)
+          }
+        }, 
+      });  
+    })
+
 
     $('#height, #width').on('change, keyup',()=>{
       $('#aspect_ratio').val(calcAspect());
     });
+
     //pickadate objects initialization
     $('#date_start').pickadate({
       formatSubmit: 'yyyy-mm-dd 00:00:00',
@@ -399,6 +431,7 @@ new IOService({
 
     self.fv = [fv1];
 
+
     //Dropzone initialization
     Dropzone.autoDiscover = false;
     self.dz = new DropZoneLoader({
@@ -412,7 +445,7 @@ new IOService({
         sizes:{
          }
       },
-      crop:{
+      crop:{ 
         ready:(cr)=>{          
           let w = $('#width').val();
           let h = $('#height').val();
@@ -420,7 +453,7 @@ new IOService({
             let r = gcd (w, h);
             cr.aspect_ratio_x = w/r;
             cr.aspect_ratio_y = h/r;
-          }
+          } 
           else{
             cr.aspect_ratio_x = 1;
             cr.aspect_ratio_y = 1;
@@ -444,23 +477,70 @@ new IOService({
           tooltip:'orbes',
           bg:'bg-success',
           action:(file)=>{
+
+            let _w = $('#width').val() == '' ? 1350 : $('#width').val();
+            let _h = $('#height').val() == '' ? 500 : $('#height').val();
+
             self.dz.addModal({
               obj:$('#orbs-modal'),
               file,
               onShow:(params,obj)=>{
                 let img = obj.find("[dz-info-modal='img']");
-                img.removeClass('w-100').addClass('m-auto').css({width:'1350px',height:'auto'});
+                img.removeClass('w-100').addClass('m-auto').css({width:`${_w}px`,height:`${_h}px`});
+                
+                file.splits = [];
+
+                setTimeout(function(){
+                  file.splits.push(Split(['#splita', '#splitb','#splitc'], {
+                      gutterSize:5,
+                      minSize:100
+                    }));
+
+                  file.splits.push(Split(['#split1','#split2','#split3'], {
+                    direction:'vertical',
+                    gutterSize:5,
+                    minSize:25
+                  }));
+
+                  file.splits.push(Split(['#split4','#split5','#split6'], {
+                    direction:'vertical',
+                    gutterSize:5,
+                    minSize:25
+                  }));
+
+                  file.splits.push(Split(['#split7','#split8','#split9'], {
+                    direction:'vertical',
+                    gutterSize:5,
+                    minSize:25
+                  }));
+
+                  
+                  if(params.infos.data.cols!==undefined){
+                    let _cols = params.infos.data.cols;
+                    file.splits.forEach((obj,i)=>{
+                      if(!i)
+                        obj.setSizes([_cols[0].percent,_cols[1].percent,_cols[2].percent]);
+                      else
+                        obj.setSizes([_cols[i-1].rows[0],_cols[i-1].rows[1],_cols[i-1].rows[2]]);
+                    })                  
+                  }
+                },500);
+
+                //(self.toView!==null)
+
+                
+
                 //console.log(params.infos.data.orbs);
                 for(let o in params.infos.data.orbs){
                   let __orb = params.infos.data.orbs[o];
 
                   $('head').append(`<link href="https://fonts.googleapis.com/css?family=${__orb.font.replace(' ','+')}"
                    rel="stylesheet" type="text/css">`);
+
                   addOrbe({
                     reload:true,
                     content:__orb.content, 
-                    x:__orb.x,
-                    y:__orb.y,
+                    container:$(`[data-col=${__orb.col}]`).find(`[data-row=${__orb.row}]`).first(),
                     w:__orb.w,
                     h:__orb.h,
                     animate:__orb.animate,
@@ -468,19 +548,24 @@ new IOService({
                     speed:__orb.speed,
                     color:__orb.color,
                     shadow:__orb.shadow
-
                   });
                 }
 
                 obj.on('hidden.bs.modal',e=>{
-                  //obj.find("#btn-add-orb").off('click');
                   //remove todos os orbs
                   $('.container-orbes').find('.orbe').remove();
+                  try{
+                    file.splits.forEach(el=>{
+                      el.destroy();
+                    });
+                  }
+                  catch(err){}
                 });
               },
               onSave:(_file,obj)=>{
                 //_file.infos.data.orbes = {} //zera toda vez
                 //percorre todos os orbs e atualiza os valores
+                _file.infos.data.cols = calcResponsiveSizes(_file.splits),
                 _file.infos.data.orbs = {}
                 $('.container-orbes').find('.orbe').each((index,el)=>{
                   let _el = $(el);
@@ -489,8 +574,12 @@ new IOService({
                     content:_el.find('.orbe-content').html().trim(),
                     w:_el.width(),
                     h:_el.outerHeight(),
-                    x:_el.data('draggabilly').position.x,
-                    y:_el.data('draggabilly').position.y,
+                    col:parseInt(_el.parent().parent().attr('data-col')),
+                    row:parseInt(_el.parent().attr('data-row')),
+//                    col:_el.parent().parent().attr('id'),
+//                    row:_el.parent().attr('id'),
+                    //x:_el.data('draggabilly').position.x,
+                    //y:_el.data('draggabilly').position.y,
                     font:_font.attr('data-font'),
                     size:_font.attr('data-size'), 
                     color:_font.attr('data-color'),
@@ -602,25 +691,24 @@ function calcAspect(){
 function gcd(a, b) {
   return (b == 0) ? a : gcd (b, a%b);
 }
-
+ 
 function addOrbe(p={
-  content:`<h1 class = 'apply-font h-100'>Um Conteúdo Qualquer</h1>`,
+  content:`<h1 class = 'apply-font'>${getRandomMessage()}</h1>`,
   reload:false
   }){
+  
+  $('.container-orbes')
+  .find('.orbe')
+  .removeClass('orbe-active');
+  
+  let element = $('.vsplitter:not(:has(*))').first().attr('id') || null;
 
-  new Orbe('.container-orbes',p.content,(orb)=>{
-    let $container = $('.container-orbes');
-    if(p.x == undefined && p.y == undefined){
-      let ch = $container.height();
-      let cw = $container.width();
-      let oh = orb._this.height();
-      let ow = orb._this.width();
-      let r = Math.floor((Math.random() * 80) + 1); //* ;
-      r *= (Math.random()%2==0) ? 1 : -1;
-      orb._this.draggabilly('setPosition',((cw/2)-(ow/2))+(r),((ch/2)-(oh/2))+(r));
-    }
-    else
-      orb._this.draggabilly('setPosition',p.x,p.y);
+  if(element==null)
+    return null;
+  else
+    element = p.container!==undefined ? `#${p.container.attr('id')}` : `#${element}`;
+
+  new Orbe(element,p.content,(orb)=>{
 
     orb._this.removeClass('invisible');
     
@@ -645,10 +733,11 @@ function addOrbe(p={
       applyTextShadow($('.container-orbes').find('.orbe-active .apply-font'));
 
     $('.container-orbes').find('.orbe-active .apply-font').on('dblclick',(e)=>{
+      console.log('sasasasasa');
         if(!orb._this.hasClass('editting') && !orb._this.hasClass('animated')){
           let obj = $(e.target);
           $('.font-select').parent().setDisabled(true).next().setDisabled(true);
-          let prop = ['color','width','height','font'];
+          let prop = ['color','width','height','font','text','text-align'];
           let ta = $("<textarea type = 'text' class = 'w-100 h-100 orb-text-edit'>");
           prop.forEach((a,b)=>{
             ta.css(a,obj.css(a)) 
@@ -671,19 +760,54 @@ function addOrbe(p={
     }
 
     $('.container-orbes').find('.orbe-active .orbe-animate').on('click',(e)=>{
-        let _orb = $(e.target).parent();
+        let _orb = $(e.target).parent().parent();
         let _anim = _orb.attr('data-animate');
         _orb.animateCss(_anim,()=>{
         });
     });
 
     $('.container-orbes').find('.orbe-active .orbe-editting').on('click',(e)=>{
+      $(e.target).parent().parent().trigger('click').find('.apply-font').trigger('dblclick');      
+    });
+
+    $('.container-orbes').find('.orbe-active .orbe-save').on('click',(e)=>{
       $('.container-orbes').trigger('click');
     });
 
     $('.container-orbes').find('.orbe-active .orbe-remove').on('click',(e)=>{
-      $(e.target).parent().remove();
+      $(e.target).parent().parent().remove();
     });
+
+    $('.container-orbes').find('.orbe-active .orb-text-center').on('click',(e)=>{
+      let el = $(e.target).parent().parent().parent().parent().parent().find('.apply-font');
+      el.removeClass('mr-0 ml-0 text-right text-left').addClass('mx-auto text-center');
+    });
+
+    $('.container-orbes').find('.orbe-active .orb-text-left').on('click',(e)=>{
+      let el = $(e.target).parent().parent().parent().parent().parent().find('.apply-font');
+      el.removeClass('mx-auto ml-auto text-center text-right').addClass('text-left');
+    });
+ 
+    $('.container-orbes').find('.orbe-active .orb-text-right').on('click',(e)=>{
+      let el = $(e.target).parent().parent().parent().parent().parent().find('.apply-font');
+      el.removeClass('mx-auto text-center text-left').addClass('ml-auto text-right');
+    });
+    
+    $('.container-orbes').find('.orbe-active .orb-text-middle').on('click',(e)=>{
+      let el = $(e.target).parent().parent().parent().parent().parent().find('.apply-font');
+      el.removeClass('align-self-end align-self-start').addClass('my-auto');
+    }); 
+
+    $('.container-orbes').find('.orbe-active .orb-text-bottom').on('click',(e)=>{
+      let el = $(e.target).parent().parent().parent().parent().parent().find('.apply-font');
+      el.removeClass('my-auto align-self-start').addClass('align-self-end');
+    });
+
+    $('.container-orbes').find('.orbe-active .orb-text-top').on('click',(e)=>{
+      let el = $(e.target).parent().parent().parent().parent().parent().find('.apply-font');
+      el.removeClass('my-auto align-self-end').addClass('align-self-start');
+    });
+
   });
 }
 
@@ -740,6 +864,71 @@ function applyTextShadow(obj){
   let _y = Math.round(_distance * Math.sin(_angle));
   let _blur = $('#shadow-blur').val();
   let _rgba = $('#shadow-color').minicolors('rgbaString');
-  console.log(_rgba);
   obj.css('text-shadow',`${_x}px ${_y}px ${_blur}px ${_rgba}`)
+}
+
+function calcResponsiveSizes(splits){
+
+  console.log(splits[1].getSizes());
+
+  let perc_cola = splits[0].getSizes()[0]
+  let perc_colb = splits[0].getSizes()[1]
+  let perc_colc = splits[0].getSizes()[2]
+
+  let flex_cola = Math.round(12 * (perc_cola/100))
+  let flex_colb = Math.round(12 * (perc_colb/100))
+  let flex_colc = Math.round(12 * (perc_colc/100))
+ 
+  return [
+      {
+        percent:perc_cola,
+        flex:flex_cola,
+        rows:splits[1].getSizes()
+      },
+      {
+        percent:perc_colb,
+        flex:flex_colb,
+        rows:splits[2].getSizes()
+      },
+      {
+        percent:perc_colc,
+        flex:flex_colc,
+        rows:splits[3].getSizes()
+      },
+    ]
+}
+
+function getRandomMessage(){
+ let $msg = [
+  "Analyzing coffee quality...",
+  "Spending a precious time...",
+  "Getting stuck in traffic...",
+  "Dividing by 0...",
+  "Crying over spilled milk...",
+  "Generating Lex's voice",
+  "Patching Conics...",
+  "Just a minute, while I dig the dungeon...",
+  "Disinfecting germ cells...",
+  "Spinning up the hamster...",
+  "Programming the flux capacitor...",
+  "Checking the gravitational constant in your locale...",
+  "Shaking...",
+  "Revolving independence...",
+  "Tokenizing innovation...",
+  "Spinning violently around the y-axis...",
+  "Bending the spoon...",
+  "Filtering moral...",
+  "Swapping time and space...",
+  "Stretching images...",
+  "Constructing non-linear narrative...",
+  "Scraping funds...",
+  "Dissolving relationships...",
+  "Iodizing...",
+  "Distilling beauty...",
+  "Constructing emotional depth...",
+  "Exceeding cpu quota...",
+  "Challenging everything..."
+  ];
+
+  return $msg[Math.floor(Math.random() * $msg.length)];
 }

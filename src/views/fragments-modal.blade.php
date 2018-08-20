@@ -81,6 +81,23 @@
             <div class = 'thumbnail d-flex h-100'>
               <div class = 'container-orbes m-auto'>
                   <img class = 'img-fluid w-100' dz-info-modal = 'img'/>
+                  <div class = 'container-splitters d-flex'>
+                    <div id = 'splita' data-col='1' class = 'splitter position-relative'>
+                      <div id = 'split1' data-row='1' class = 'vsplitter position-relative'></div>
+                      <div id = 'split2' data-row='2' class = 'vsplitter position-relative'></div>
+                      <div id = 'split3' data-row='3' class = 'vsplitter position-relative'></div>
+                    </div>
+                    <div id = 'splitb' data-col='2' class = 'splitter position-relative'>
+                      <div id = 'split4' data-row='1' class = 'vsplitter position-relative'></div>
+                      <div id = 'split5' data-row='2' class = 'vsplitter position-relative'></div>
+                      <div id = 'split6' data-row='3' class = 'vsplitter position-relative'></div>
+                    </div>
+                    <div id = 'splitc' data-col='3' class = 'splitter position-relative'>
+                      <div id = 'split7' data-row='1' class = 'vsplitter position-relative'></div>
+                      <div id = 'split8' data-row='2' class = 'vsplitter position-relative'></div>
+                      <div id = 'split9' data-row='3' class = 'vsplitter position-relative'></div>
+                    </div>
+                  </div>
               </div>
             </div>
           </div>

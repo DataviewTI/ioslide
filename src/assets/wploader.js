@@ -10,12 +10,11 @@ function IOSlide(params={}){
     jquerycropper: 'node_modules/jquery-cropper/dist/',
     dropzone: 'node_modules/dropzone/dist/',
     moment: 'node_modules/moment/',
-    draggabilly:'node_modules/draggabilly/dist/',
     animate:'node_modules/animate.css/',
     fontselect:'node_modules/fontselect-jquery-plugin/',
     minicolors:'node_modules/@claviska/jquery-minicolors/',
-    //resizesensor:'node_modules/resize-sensor/'
-    jqueryknob:'node_modules/jquery-knob/dist/'
+    jqueryknob:'node_modules/jquery-knob/dist/',
+    splitjs:'node_modules/split.js/'
   }
 
   let config = {
@@ -44,6 +43,7 @@ function IOSlide(params={}){
       $.dep.minicolors + 'jquery.minicolors.css',
       $.dep.animate + 'animate.min.css',
       $.dep.slide + 'orbe.css',
+      $.dep.slide + 'splitjs.css',
       $.dep.slide + 'slide.css',
     ], IO.dest.io.root + 'services/io-slide.min.css');
     
@@ -57,18 +57,17 @@ function IOSlide(params={}){
       IO.src.io.js + 'defaults/def-toastr.js',
       $.dep.dropzone + 'dropzone.js',
       IO.src.io.js + 'dropzone-loader.js',
-      $.dep.draggabilly + 'draggabilly.pkgd.min.js',
       $.dep.jqueryknob + 'jquery.knob.min.js',
     ], IO.dest.io.root + 'services/io-slide-babel.min.js');
     
     mix.scripts([
-//      $.dep.resizesensor + 'ResizeSensor.min.js',
       $.dep.moment + 'min/moment.min.js',
       IO.src.io.vendors + 'moment/moment-pt-br.js',
       $.dep.cropper + 'cropper.js',
       $.dep.jquerycropper + 'jquery-cropper.js',
       $.dep.fontselect + 'jquery.fontselect.min.js',
       $.dep.minicolors + 'jquery.minicolors.min.js',    
+      $.dep.splitjs + 'split.min.js',
     ], IO.dest.io.root + 'services/io-slide-mix.min.js');
 
     //copy separated for compatibility
