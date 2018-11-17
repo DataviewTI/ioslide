@@ -17,11 +17,11 @@ php artisan io-slide:install
 ...
 let slide = require('io-slide');
 io.compile({
-  services:{
+  services:[
     ...
-    new slide()
+    new slide(),
     ...
-  }
+  ]
 });
 
 ```
