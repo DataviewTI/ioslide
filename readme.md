@@ -15,7 +15,7 @@ php artisan io-slide:install
 - Configure o webpack conforme abaixo 
 ```js
 ...
-let slide = require('io-slide');
+let slide = require('intranetone-slide');
 io.compile({
   services:[
     ...
