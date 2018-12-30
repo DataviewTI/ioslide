@@ -19,12 +19,20 @@ class SlideSeeder extends Seeder
             'order' => Service::max('order')+1
           ]);
       }
-      //seta privilegios padrão para o user admin
-      $user = Sentinel::findById(1);
-      $user->addPermission('slide.view');
-      $user->addPermission('slide.create');
-      $user->addPermission('slide.update');
-      $user->addPermission('slide.delete');
-      $user->save();
+      //seta privilegios padrão para o user odin
+      $odinRole = Sentinel::findRoleBySlug('odin');
+      $odinRole->addPermission('slide.view');
+      $odinRole->addPermission('slide.create');
+      $odinRole->addPermission('slide.update');
+      $odinRole->addPermission('slide.delete');
+      $odinRole->save();
+
+      //seta privilegios padrão para o role admin
+      $adminRole = Sentinel::findRoleBySlug('admin');
+      $adminRole->addPermission('slide.view');
+      $adminRole->addPermission('slide.create');
+      $adminRole->addPermission('slide.update');
+      $adminRole->addPermission('slide.delete');
+      $adminRole->save();
     }
 } 
