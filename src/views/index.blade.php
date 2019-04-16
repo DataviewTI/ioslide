@@ -33,13 +33,13 @@
 	<!-- content -->
   @stop
 
-  @section('after_body_scripts')
+  {{-- @section('after_body_scripts')
     @include('IntranetOne::base.social.fb-sdk',[
-        'appID'=>config('intranetone.social_media.facebook.appId'),
-        'appVersion'=>config('intranetone.social_media.facebook.appVersion'),
-        'appLocale'=>config('intranetone.social_media.facebook.locale')
+        'app_id'=>config('intranetone.social_media.facebook.app_id'),
+        'app_version'=>config('intranetone.social_media.facebook.app_version'),
+        'app_locale'=>config('intranetone.social_media.facebook.locale')
         ])
-  @endsection
+  @endsection --}}
 
   @section('before_body_close')
     @include('Slide::infos-modal')

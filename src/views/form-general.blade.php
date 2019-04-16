@@ -120,6 +120,7 @@
   </div>
   <div class="col-sm-6 col-xs-12">
     @include("IntranetOne::io.forms.form-images",[
+      "id" => "custom-dropzone",
       "modal" => 'Slide::infos-modal'
     ])
   </div>
