@@ -433,6 +433,7 @@ new IOService({
 
 
     //Dropzone initialization
+    console.log('asa')
     Dropzone.autoDiscover = false;
     self.dz = new DropZoneLoader({
       id:'#custom-dropzone',
