@@ -197,10 +197,10 @@ new IOService({
       handle: ".dz-reorder",
     });
     
-    Sortable.create(document.getElementById('custom-dropzone'),{
-      animation: 250,
-      handle: ".dz-reorder",
-    });
+    // Sortable.create(document.getElementById('custom-dropzone'),{
+    //   animation: 250,
+    //   handle: ".dz-reorder",
+    // });
 
 
     $('.vsplitter').each((i,obj)=>{
