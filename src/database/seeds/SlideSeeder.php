@@ -13,6 +13,7 @@ class SlideSeeder extends Seeder
       if(!Service::where('service','Slide')->exists()){
         Service::insert([
             'service' => "Slide",
+            'trans' =>'Slides',
             'alias' =>'slide',
             'ico' => 'ico-slider',
             'description' => "Controle de Slides",

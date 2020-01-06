@@ -33,8 +33,7 @@ class CreateSlidesTable extends Migration
      *
      * @return void
      */
-    public function down()
-    {
-        Schema::dropIfExists('slides');
+    public function down(){
+      Schema::dropIfExists('slides');
     }
 }
