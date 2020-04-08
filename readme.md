@@ -1,18 +1,29 @@
-
 # Gestor de Slides para IntranetOne
+
 Gestor de slides BS4 com definição de largura e altura, recorte de imagem, prazo de exibição, intervalo, exibição ou não de controles e marcadores.
-## Conteúdo
- 
-## Instalação
+
+#### Composer installation
+
+Laravel 7 or above, PHP >= 7.2.5
 
 ```sh
-composer require dataview/ioslide
+composer require dataview/ioslide dev-master
 ```
+
+laravel 5.6 or below, PHP >= 7 and < 7.2.5
+
+```sh
+composer require dataview/ioslide 1.0.0
+```
+
+#### Laravel artisan installation
+
 ```sh
 php artisan io-slide:install
 ```
 
-- Configure o webpack conforme abaixo 
+- Configure o webpack conforme abaixo
+
 ```js
 ...
 let slide = require('intranetone-slide');
@@ -25,12 +36,15 @@ io.compile({
 });
 
 ```
+
 - Compile os assets e faça o cache
+
 ```sh
 npm run dev|prod|watch
 php artisan config:cache
 ```
-## Frontend 
+
+## Frontend
 
 - Adicione a chamada da classe ao seu arquivo .blade
 
