@@ -1,11 +1,12 @@
 @php
   use Dataview\IOSlide\Slide;
   use Carbon\Carbon;
+  use Illuminate\Support\Str;
 
   $obj = isset($slide) ? $slide : Slide::first();
   $today = Carbon::now();
   $date_start = (new Carbon($obj->date_start));
-  $_id = isset($id) ? $id : str_random(6);
+  $_id = isset($id) ? $id : Str::random(6);
   $date_end = filled($obj->date_end) ? new Carbon($obj->date_end) : Carbon::createFromDate(2099,1,1);
   $is_valid_date = ($today->gte($date_start) && $today->lte($date_end));
   $_indicators = isset($indicators) ? $indicators : ($obj->indicators == 1 ? 'true' : 'false');
