@@ -16,7 +16,7 @@ new IOService({
 
       let ico = $(e.target).find('.ico');
       let _orbes = $('.container-orbes').find('.orbe[data-animate]');
-      let counter = _orbes.length; 
+      let counter = _orbes.length;
       if(_orbes.length){
         ico.addClass('ico-orbe ico-spin').removeClass('ico-eye');
         $('#orbs-modal .modal-header').css('position','relative').setDisabled(true);
@@ -45,7 +45,7 @@ new IOService({
       "fgColor":"#333",
       "skin":"tron",
       font : "normal 10px Oswald",
-      "width":48, 
+      "width":48,
       thickness:.3,
       cursor:10,
       'change' : v=> {
@@ -60,7 +60,7 @@ new IOService({
       "fgColor":"#333",
       "skin":"tron",
       font : "normal 10px Oswald",
-      "width":48, 
+      "width":48,
       thickness:.3,
       cursor:10,
       'change' : v=> {
@@ -74,14 +74,14 @@ new IOService({
       "fgColor":"#333",
       "skin":"tron",
       font : "normal 10px Oswald",
-      "width":48, 
+      "width":48,
       thickness:.3,
       cursor:10,
       'change' : v=> {
         applyTextShadow($('.container-orbes').find('.orbe-active .apply-font'));
       }
     });
-    
+
     //$('.container-text-shadow').setDisabled(true);
 
     $('#text-shadow').attrchange(function(attrName){
@@ -97,7 +97,7 @@ new IOService({
           $('.container-text-shadow').setDisabled(true);
           $('.container-orbes').find('.orbe-active .apply-font').css('text-shadow','none');
         }
-  
+
       }
     });
 
@@ -120,7 +120,7 @@ new IOService({
 
       $('.font-select').parent().setDisabled(false).next().setDisabled(false);
 
-      
+
       //console.log(self.fontPicker.getActiveFont());
      });
 
@@ -130,12 +130,12 @@ new IOService({
       let font = $(this).val().replace(/\+/g, ' ') || 'Oswald';
       $('.container-orbes').find('.orbe-active .apply-font').css({'font-family':font}).attr('data-font',font);
     });
-    
+
     $('#fsize').change(function(){
       let size = $(this).val()+'px';
       $('.container-orbes').find('.orbe-active .apply-font').css({'font-size':size}).attr('data-size',size);
     });
-    
+
     $('#fcolor').minicolors({
       defaultValue: '#fff',
       letterCase: 'uppercase',
@@ -161,7 +161,7 @@ new IOService({
     $('#o-animate').change(function(){
       setAnimation($(this).val());
     });
-    
+
     $('#o-speed').change(function(){
       setAnimationSpeed($(this).val());
     });
@@ -170,7 +170,7 @@ new IOService({
         setAnimationDelay($(this).val());
       });
 
-        
+
 
     $('[data-toggle="popover"]').popover();
 
@@ -191,12 +191,12 @@ new IOService({
         $('#__wrap').val($(this).attr('aria-pressed'));
     });
 
-    
+
     Sortable.create(document.getElementById('custom-dropzone'),{
       animation: 250,
       handle: ".dz-reorder",
     });
-    
+
     Sortable.create(document.getElementById('custom-dropzone'),{
       animation: 250,
       handle: ".dz-reorder",
@@ -212,8 +212,8 @@ new IOService({
           pull: function (to, from) {
             return !(to.el.children.length > 0)
           }
-        }, 
-      });  
+        },
+      });
     })
 
 
@@ -237,7 +237,7 @@ new IOService({
         $('#date_end').pickadate().pickadate('picker').set('min',new Date())
         self.fv[0].revalidateField('date_start');
     });
-  
+
     $('#date_end').pickadate({
       formatSubmit: 'yyyy-mm-dd 00:00:00',
       min: new Date(),
@@ -250,7 +250,7 @@ new IOService({
 
 
     //Datatables initialization
-    
+
     self.dt = $('#default-table').DataTable({
       aaSorting:[ [0,"desc" ]],
       ajax: self.path+'/list',
@@ -258,7 +258,7 @@ new IOService({
         //parent call
         let api = this.api();
         $.fn.dataTable.defaults.initComplete(this);
-  
+
         //pickadate objects initialization
         $('#ft_dtini').pickadate({
         }).pickadate('picker').on('set', function(t){
@@ -324,13 +324,13 @@ new IOService({
           render:function(data,type,row,y){
             return self.dt.addDTButtons({
               buttons:[
-                {ico:'ico-eye',_class:'text-primary',title:'preview'},
+                // {ico:'ico-eye',_class:'text-primary',title:'preview'},
                 {ico:'ico-edit',_class:'text-info',title:'editar'},
                 {ico:'ico-trash',_class:'text-danger',title:'excluir'},
             ]});
           }
         }
-      ]	
+      ]
     }).on('click',".btn-dt-button[data-original-title=editar]",function(){
       var data = self.dt.row($(this).parents('tr')).data();
       self.view(data.id);
@@ -404,7 +404,7 @@ new IOService({
               callback:{
                 message: 'O slide deve conter ao menos uma image!',
                 callback: function(input){
-                  
+
                   if(self.dz.files.length==0){
                     toastr["error"]("O slide deve conter ao menos uma imagem!")
                     return false;
@@ -445,15 +445,15 @@ new IOService({
         sizes:{
          }
       },
-      crop:{ 
-        ready:(cr)=>{          
+      crop:{
+        ready:(cr)=>{
           let w = $('#width').val();
           let h = $('#height').val();
           if(w>0 && h>0){
             let r = gcd (w, h);
             cr.aspect_ratio_x = w/r;
             cr.aspect_ratio_y = h/r;
-          } 
+          }
           else{
             cr.aspect_ratio_x = 1;
             cr.aspect_ratio_y = 1;
@@ -487,7 +487,7 @@ new IOService({
               onShow:(params,obj)=>{
                 let img = obj.find("[dz-info-modal='img']");
                 img.removeClass('w-100').addClass('m-auto').css({width:`${_w}px`,height:`${_h}px`});
-                
+
                 file.splits = [];
 
                 setTimeout(function(){
@@ -514,7 +514,7 @@ new IOService({
                     minSize:25
                   }));
 
-                  
+
                   if(params.infos.data.cols!==undefined){
                     let _cols = params.infos.data.cols;
                     file.splits.forEach((obj,i)=>{
@@ -522,13 +522,13 @@ new IOService({
                         obj.setSizes([_cols[0].percent,_cols[1].percent,_cols[2].percent]);
                       else
                         obj.setSizes([_cols[i-1].rows[0],_cols[i-1].rows[1],_cols[i-1].rows[2]]);
-                    })                  
+                    })
                   }
                 },500);
 
                 //(self.toView!==null)
 
-                
+
 
                 //console.log(params.infos.data.orbs);
                 for(let o in params.infos.data.orbs){
@@ -539,7 +539,7 @@ new IOService({
 
                   addOrbe({
                     reload:true,
-                    content:__orb.content, 
+                    content:__orb.content,
                     container:$(`[data-col=${__orb.col}]`).find(`[data-row=${__orb.row}]`).first(),
                     w:__orb.w,
                     h:__orb.h,
@@ -581,7 +581,7 @@ new IOService({
                     //x:_el.data('draggabilly').position.x,
                     //y:_el.data('draggabilly').position.y,
                     font:_font.attr('data-font'),
-                    size:_font.attr('data-size'), 
+                    size:_font.attr('data-size'),
                     color:_font.attr('data-color'),
                     animate:_el.attr('data-animate') || "",
                     delay:_el.attr('data-delay') || "",
@@ -603,9 +603,9 @@ new IOService({
       }
     });
 
-    
+
     //need to transform wizardActions in a method of Class
-    self.wizardActions(function(){ 
+    self.wizardActions(function(){
       self.dz.copy_params.sizes.default = {"w":$('#width').val(),"h":$('#height').val()}
       $("[name='__dz_images']").val(JSON.stringify(self.dz.getOrderedDataImages()));
       console.log($("[name='__dz_images']").val());
@@ -630,7 +630,7 @@ new IOService({
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                                                                                                            
+
   ██╗      ██████╗  ██████╗ █████╗ ██╗         ███╗   ███╗███████╗████████╗██╗  ██╗ ██████╗ ██████╗ ███████╗
   ██║     ██╔═══██╗██╔════╝██╔══██╗██║         ████╗ ████║██╔════╝╚══██╔══╝██║  ██║██╔═══██╗██╔══██╗██╔════╝
   ██║     ██║   ██║██║     ███████║██║         ██╔████╔██║█████╗     ██║   ███████║██║   ██║██║  ██║███████╗
@@ -654,7 +654,7 @@ function view(self){
         $("[name='width']").val(data.width);
         $("[name='height']").val(data.height);
         $("[name='height']").trigger('keyup');
-        
+
         $("#interval").val(data.interval > 0 ? data.interval : '');
 
         $("#controls").aaToggle(!data.controls==0);
@@ -663,7 +663,7 @@ function view(self){
         $("#wrap").aaToggle(!data.wrap==0);
 
 
-        //reload imagens 
+        //reload imagens
           self.dz.removeAllFiles(true);
 
           if(data.group!=null){
@@ -691,16 +691,16 @@ function calcAspect(){
 function gcd(a, b) {
   return (b == 0) ? a : gcd (b, a%b);
 }
- 
+
 function addOrbe(p={
   content:`<h1 class = 'apply-font'>${getRandomMessage()}</h1>`,
   reload:false
   }){
-  
+
   $('.container-orbes')
   .find('.orbe')
   .removeClass('orbe-active');
-  
+
   let element = $('.vsplitter:not(:has(*))').first().attr('id') || null;
 
   if(element==null)
@@ -711,7 +711,7 @@ function addOrbe(p={
   new Orbe(element,p.content,(orb)=>{
 
     orb._this.removeClass('invisible');
-    
+
     if(!p.reload)//faz o bind somente se for objeto novo
       $('#font-select, #fsize, #o-animate, #o-speed, #o-delay').trigger('change');
 
@@ -740,12 +740,12 @@ function addOrbe(p={
           let prop = ['color','width','height','font','text','text-align'];
           let ta = $("<textarea type = 'text' class = 'w-100 h-100 orb-text-edit'>");
           prop.forEach((a,b)=>{
-            ta.css(a,obj.css(a)) 
+            ta.css(a,obj.css(a))
           });
           ta.css('width',obj.parent().width()+'px');
           let _width = orb._this.width();
           let _height = orb._this.outerHeight();
-          ta.insertBefore(obj).focus().text(obj.text()).focus(); 
+          ta.insertBefore(obj).focus().text(obj.text()).focus();
           orb._this.css({'width':_width+'px','height':_height+'px'});
           orb._this.addClass('editting');
         }
@@ -767,7 +767,7 @@ function addOrbe(p={
     });
 
     $('.container-orbes').find('.orbe-active .orbe-editting').on('click',(e)=>{
-      $(e.target).parent().parent().trigger('click').find('.apply-font').trigger('dblclick');      
+      $(e.target).parent().parent().trigger('click').find('.apply-font').trigger('dblclick');
     });
 
     $('.container-orbes').find('.orbe-active .orbe-save').on('click',(e)=>{
@@ -787,16 +787,16 @@ function addOrbe(p={
       let el = $(e.target).parent().parent().parent().parent().parent().find('.apply-font');
       el.removeClass('mx-auto ml-auto text-center text-right').addClass('text-left');
     });
- 
+
     $('.container-orbes').find('.orbe-active .orb-text-right').on('click',(e)=>{
       let el = $(e.target).parent().parent().parent().parent().parent().find('.apply-font');
       el.removeClass('mx-auto text-center text-left').addClass('ml-auto text-right');
     });
-    
+
     $('.container-orbes').find('.orbe-active .orb-text-middle').on('click',(e)=>{
       let el = $(e.target).parent().parent().parent().parent().parent().find('.apply-font');
       el.removeClass('align-self-end align-self-start').addClass('my-auto');
-    }); 
+    });
 
     $('.container-orbes').find('.orbe-active .orb-text-bottom').on('click',(e)=>{
       let el = $(e.target).parent().parent().parent().parent().parent().find('.apply-font');
@@ -816,7 +816,7 @@ function setAnimation(val,animate=true){
   let oldanime = _orb.attr('data-animate') || '';
   _orb.removeClass(`animated ${oldanime}`.trim());
 
-  if(val !== ''){ 
+  if(val !== ''){
     $('#o-speed, #o-delay').removeAttr('disabled');
     _orb.attr('data-animate',val);
     if(animate){
@@ -848,7 +848,7 @@ function setAnimationDelay(val){
   let _orb = $('.container-orbes').find('.orbe-active');
   let old = _orb.attr('data-delay') || '';
   _orb.removeClass(`${old}`.trim());
-    
+
   if(val !== ''){
     _orb.addClass(val);
     _orb.css({'data-delay':val}).attr('data-delay',val);
@@ -878,7 +878,7 @@ function calcResponsiveSizes(splits){
   let flex_cola = Math.round(12 * (perc_cola/100))
   let flex_colb = Math.round(12 * (perc_colb/100))
   let flex_colc = Math.round(12 * (perc_colc/100))
- 
+
   return [
       {
         percent:perc_cola,
